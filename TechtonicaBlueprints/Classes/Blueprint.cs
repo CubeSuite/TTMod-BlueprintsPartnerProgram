@@ -14,6 +14,13 @@ namespace TechtonicaBlueprints.Classes
         public MyVector3 size;
         public int rotation = 0;
         public List<uint> machineIDs = new List<uint>();
+        public List<int> machineResIDs = new List<int>();
+        public List<int> machineTypes = new List<int>();
+        public List<int> machineRotations = new List<int>();
+        public List<int> machineRecipes = new List<int>();
+        public List<int> conveyorShapes = new List<int>();
+        public List<bool> conveyorBuildBackwards = new List<bool>();
+
         public List<MyVector3> machineRelativePositions = new List<MyVector3>();
     }
 

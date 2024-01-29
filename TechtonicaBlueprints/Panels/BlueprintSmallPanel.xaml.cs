@@ -35,7 +35,7 @@ namespace TechtonicaBlueprints.Panels
 
         public BlueprintSmallPanel(int id) {
             InitializeComponent();
-            showBlueprint(BlueprintManager.getBlueprint(id));
+            showBlueprint(BlueprintManager.tryGetBlueprint(id));
         }
 
         // Objects & Variables
@@ -56,7 +56,7 @@ namespace TechtonicaBlueprints.Panels
 
         private void onDeleteClicked(object sender, EventArgs e) {
             if(GetYesNoWindow.getYesNo("Delete Blueprint?", "Are you sure you want to delete this blueprint? This cannot be undone")) {
-                BlueprintManager.deleteBlueprint(blueprint);
+                BlueprintManager.deleteBlueprint(blueprint, true);
                 WrapPanel panel = (WrapPanel)Parent;
                 panel.Children.Remove(this);
             }
@@ -65,6 +65,8 @@ namespace TechtonicaBlueprints.Panels
         // Public Functions
 
         public void showBlueprint(Blueprint blueprintToShow) {
+            if (blueprintToShow == null) return;
+
             blueprint = blueprintToShow;
             nameLabel.Content = blueprint.name;
         }

@@ -47,7 +47,7 @@ namespace TechtonicaBlueprints.Classes
 
         public BlueprintBook getParent() {
             if (parentId != -1 && BookManager.doesBookExist(parentId)) {
-                return BookManager.getBook(parentId);
+                return BookManager.tryGetBook(parentId);
             }
             
             return null;

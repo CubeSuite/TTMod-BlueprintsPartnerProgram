@@ -16,10 +16,12 @@ namespace TechtonicaBlueprints
 
         // Public Functions
 
-        public static void addBlueprint(Blueprint blueprint, bool shouldSave = true) {
+        public static int addBlueprint(Blueprint blueprint, bool shouldSave = true) {
             if(blueprint.id <= 0) blueprint.id = getNewBlueprintID();
             blueprints.Add(blueprint.id, blueprint);
             if (shouldSave) saveData();
+
+            return blueprint.id;
         }
 
         public static void updateBlueprint(Blueprint blueprint) {
@@ -33,7 +35,7 @@ namespace TechtonicaBlueprints
             return blueprints.ContainsKey(id);
         }
 
-        public static Blueprint getBlueprint(int id) {
+        public static Blueprint tryGetBlueprint(int id) {
             if (doesBlueprintExist(id)) return blueprints[id];
             else return null;
         }
@@ -42,11 +44,15 @@ namespace TechtonicaBlueprints
             return blueprints.Values.ToList();
         }
 
-        public static void deleteBlueprint(Blueprint blueprint) {
+        public static void deleteBlueprint(Blueprint blueprint, bool removeFromParent = false) {
             if (!doesBlueprintExist(blueprint.id) || !BookManager.doesBookExist(blueprint.parentID)) return;
+
+            if (removeFromParent) {
+                BlueprintBook parent = BookManager.tryGetBook(blueprint.parentID);
+                parent.removeBlueprint(blueprint.id);
+                BookManager.updateBook(parent);
+            }
             
-            BlueprintBook parent = BookManager.getBook(blueprint.parentID);
-            parent.removeBlueprint(blueprint.id);
             blueprints.Remove(blueprint.id);
         }
 
@@ -82,7 +88,7 @@ namespace TechtonicaBlueprints
         }
         
         public static void deleteBlueprint(int id) {
-            deleteBlueprint(getBlueprint(id));
+            deleteBlueprint(tryGetBlueprint(id));
         }
 
         // Private Functions

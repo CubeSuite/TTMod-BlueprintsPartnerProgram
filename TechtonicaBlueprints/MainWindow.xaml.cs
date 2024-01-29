@@ -121,11 +121,11 @@ namespace TechtonicaBlueprints
         private void onImportBlueprintBookClicked(object sender, EventArgs e) {
             string json = Utils.getClipboardText();
             try {
-                BlueprintBook book = JsonConvert.DeserializeObject<BlueprintBook>(json);
-                int newBookID = BookManager.addBook(book);
+                SharableBook book = JsonConvert.DeserializeObject<SharableBook>(json);
+                int newBookID = BookManager.addSharableBook(book);
                 
                 BlueprintBook currentBook = BookManager.getCurrentBook();
-                currentBook.addBook(book);
+                currentBook.addBook(newBookID);
                 BookManager.updateBook(currentBook);
              
                 showBook(newBookID);
@@ -142,7 +142,7 @@ namespace TechtonicaBlueprints
         // Public Functions
 
         public void showBook(int id) {
-            showBook(BookManager.getBook(id));
+            showBook(BookManager.tryGetBook(id));
         }
 
         public void showBook(BlueprintBook book) {

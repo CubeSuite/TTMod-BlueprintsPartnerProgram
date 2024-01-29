@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -24,6 +25,29 @@ namespace TechtonicaBlueprints
             return book.id;
         }
 
+        public static int addSharableBook(SharableBook book, int parentId = -10) {
+            BlueprintBook newBook = new BlueprintBook() { name = book.name };
+            newBook.id = getNewBookID();
+            if(parentId != -10) newBook.parentId = parentId;
+            addBook(newBook);
+
+            foreach (SharableSlot slot in book.slots) {
+                if (slot.blueprint != null) {
+                    slot.blueprint.id = -1;
+                    slot.blueprint.parentID = newBook.id;
+                    int id = BlueprintManager.addBlueprint(slot.blueprint);
+                    newBook.addBlueprint(id);
+                }
+                else if (slot.blueprintBook != null) {
+                    int childBookID = addSharableBook(slot.blueprintBook, newBook.id);
+                    newBook.addBook(childBookID);
+                }
+            }
+
+            updateBook(newBook);
+            return newBook.id;
+        }
+
         public static void updateBook(BlueprintBook book) {
             if (doesBookExist(book)) {
                 books[book.id] = book;
@@ -35,7 +59,7 @@ namespace TechtonicaBlueprints
             return books.ContainsKey(id);
         }
 
-        public static BlueprintBook getBook(int id) {
+        public static BlueprintBook tryGetBook(int id) {
             if (doesBookExist(id)) return books[id];
             else return null;
         }
@@ -52,8 +76,14 @@ namespace TechtonicaBlueprints
             return books[ProgramData.currentBookID];
         }
 
-        public static void deleteBook(BlueprintBook book) {
+        public static void deleteBook(BlueprintBook book, bool removeFromParent = false) {
+            if (book == null) return;
             if (!doesBookExist(book.id)) return;
+
+            if (doesBookExist(book.parentId) && removeFromParent) {
+                BlueprintBook parent = tryGetBook(book.parentId);
+                parent.removeBook(book.id);
+            }
 
             foreach(Slot slot in book.slots) {
                 if (slot.getType() == SlotType.blueprint) BlueprintManager.deleteBlueprint(slot.blueprintID);
@@ -97,7 +127,7 @@ namespace TechtonicaBlueprints
         }
 
         public static void deleteBook(int id) {
-            deleteBook(getBook(id));
+            deleteBook(tryGetBook(id));
         }
 
         #endregion

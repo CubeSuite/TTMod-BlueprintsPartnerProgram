@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -55,12 +56,13 @@ namespace TechtonicaBlueprints.Panels
         }
 
         private void onExportBookClicked(object sender, EventArgs e) {
-            Utils.setClipboardText(JsonConvert.SerializeObject(book));
+            SharableBook sharable = new SharableBook(book);
+            Utils.setClipboardText(JsonConvert.SerializeObject(sharable));
         }
 
         private void onDeleteBookClicked(object sender, EventArgs e) {
             if(GetYesNoWindow.getYesNo("Delete Book?", "Are you sure you want to delete this book? All child books and blueprints will be deleted. This cannot be undone.")) {
-                BookManager.deleteBook(book);
+                BookManager.deleteBook(book, true);
                 MainWindow.current.showBook(0);
             }
         }

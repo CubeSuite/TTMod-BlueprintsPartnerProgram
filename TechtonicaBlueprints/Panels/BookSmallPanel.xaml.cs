@@ -32,7 +32,7 @@ namespace TechtonicaBlueprints.Panels
 
         public BookSmallPanel(int id) {
             InitializeComponent();
-            showBook(BookManager.getBook(id));
+            showBook(BookManager.tryGetBook(id));
         }
 
         // Objects & Variables
