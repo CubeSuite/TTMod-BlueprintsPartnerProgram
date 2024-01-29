@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="TechtonicaBlueprints.Panels.BlueprintSmallPanel"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:TechtonicaBlueprints.Panels"
+             xmlns:Controls="clr-namespace:TechtonicaBlueprints.Controls"
+             mc:Ignorable="d" 
+             Height="Auto" d:DesignWidth="200">
+    <Grid>
+        <Border Background="{DynamicResource lightestBackgroundBrush}" CornerRadius="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Label x:Name="nameLabel" Content="Name" Style="{DynamicResource titleStyle}" Margin="5,0,5,5"
+                       VerticalAlignment="Stretch" HorizontalContentAlignment="Center" VerticalContentAlignment="Center"/>
+
+                <Controls:TButton ButtonText="Use" LeftClicked="onUseClicked" Grid.Row="1" Margin="5,2.5"/>
+                <Controls:TButton ButtonText="Export" LeftClicked="onExportClicked" Grid.Row="2" Margin="5,2.5"/>
+                <Controls:TButton ButtonText="Delete" LeftClicked="onDeleteClicked" Grid.Row="3" Margin="5,2.5,5,5"/>
+
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
